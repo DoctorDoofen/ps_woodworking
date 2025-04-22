@@ -75,8 +75,6 @@ function ProductForm() {
 
     try {
       if (isEditMode && productId) {
-        // For updating, you might need a different endpoint or way to handle images
-        // This example assumes you can update product details. Image updates might be separate.
         dispatch(updateProduct(productId, product)).then((res) => {
           navigate(`/products/${res.id}`);
           closeModal()
