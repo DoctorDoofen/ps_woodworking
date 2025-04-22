@@ -38,9 +38,6 @@ function ProductForm() {
       setDepartment(productDetails.department || '');
       setQuantity(productDetails.quantity || '');
       setDescription(productDetails.description || '');
-      // You'll need to adjust how you fetch and populate existing images for editing
-      // based on how your backend returns them.
-      // For now, we'll leave these empty for the edit form.
       setPreviewImage(productDetails.productImages[0].url || '');
       setImage1(productDetails.productImages.length >= 1 && (productDetails.productImages[0].url || ''));
       setImage2(productDetails.productImages.length >= 2 && (productDetails.productImages[1].url || ''));
