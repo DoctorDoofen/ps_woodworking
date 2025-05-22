@@ -5,6 +5,10 @@ from sqlalchemy.sql import text
 
 # Adds a demo product, you can add other products here if you want
 def seed_products():
+    
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+
     user = User.query.filter(User.seller == True).first()
    
     items = [
@@ -42,19 +46,18 @@ def seed_products():
 
 def undo_products():
     if environment == "production":
-        db.session.execute(f"TRUNCATE table {SCHEMA}.order_items RESTART IDENTITY CASCADE;")
-        db.session.execute(f"TRUNCATE table {SCHEMA}.images RESTART IDENTITY CASCADE;")
-        db.session.execute(f"TRUNCATE table {SCHEMA}.products RESTART IDENTITY CASCADE;")
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+        db.session.execute(f"TRUNCATE table order_items RESTART IDENTITY CASCADE;")
+        db.session.execute(f"TRUNCATE table images RESTART IDENTITY CASCADE;")
+        db.session.execute(f"TRUNCATE table products RESTART IDENTITY CASCADE;")
     else:
         db.session.execute(text("DELETE FROM order_items"))
         db.session.execute(text("DELETE FROM images"))
         db.session.execute(text("DELETE FROM products"))
 
-         # Reset ID counters for Postgres
+        # Reset ID counters for Postgres
         db.session.execute(text("ALTER SEQUENCE order_items_id_seq RESTART WITH 1"))
         db.session.execute(text("ALTER SEQUENCE images_id_seq RESTART WITH 1"))
         db.session.execute(text("ALTER SEQUENCE products_id_seq RESTART WITH 1"))
 
     db.session.commit()
-
-

@@ -5,6 +5,8 @@ import random
 
 def seed_reviews():
     try:
+        if environment == "production":
+            db.session.execute(text(f"SET search_path TO {SCHEMA}"))
         # Get all products
         for product in Product.query.all():
             product_id = product.id
@@ -30,7 +32,10 @@ def seed_reviews():
         
 def undo_reviews():
     if environment == 'production':
-        db.session.execute(f"TRUNCATE table {SCHEMA}.reviews CASCADE;")
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+        db.session.execute(f"TRUNCATE table reviews RESTART IDENTITY CASCADE;")
     else:
         db.session.execute(text("DELETE FROM reviews"))
+
+    db.session.commit()
         

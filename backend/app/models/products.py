@@ -7,17 +7,13 @@ favorites_table = db.Table(
     'favorites',
     db.Model.metadata,
     db.Column('user_id', db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), primary_key=True),
-    db.Column('product_id', db.Integer, db.ForeignKey(add_prefix_for_prod('products.id')), primary_key=True)
+    db.Column('product_id', db.Integer, db.ForeignKey(add_prefix_for_prod('products.id')), primary_key=True),
+    schema=SCHEMA
 )
-
-if environment == "production":
-    favorites_table.schema = SCHEMA
 
 class Product(db.Model):
     __tablename__ = 'products'
-
-    if environment == "production":
-        __table_args__ = {'schema': SCHEMA}
+    __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     seller_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
